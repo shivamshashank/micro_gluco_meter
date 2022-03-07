@@ -7,7 +7,7 @@ ThemeData appThemeData() {
     fontFamily: 'RobotoMono',
     primarySwatch: createMaterialColor(primaryColor),
     focusColor: createMaterialColor(primaryColor)[900],
-    dividerColor: getTextColor(primaryColor),
+    dividerColor: Colors.grey,
     indicatorColor: createMaterialColor(primaryColor)[200],
     primaryColor: primaryColor,
     textTheme: TextTheme(

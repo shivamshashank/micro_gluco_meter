@@ -149,7 +149,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       bottomNavigationBar: CustomButton(
-        text: "SUBMIT",
+        child: const Text(
+          "SUBMIT",
+          style: TextStyle(fontSize: 16),
+        ),
         onPressed: _submit,
       ),
     );
