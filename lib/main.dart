@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:micro_gluco_meter/screens/splash_screen.dart';
+import 'package:micro_gluco_meter/utils/routes.dart';
+import 'package:micro_gluco_meter/widgets/app_theme_data.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,13 +21,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       builder: () => MaterialApp(
         title: 'Micro Gluco Meter',
-        theme: ThemeData(
-          primaryColor: Colors.blue,
-          fontFamily: 'RobotoMono',
-          textSelectionTheme: const TextSelectionThemeData(
-            selectionHandleColor: Colors.blue,
-          ),
-        ),
+        theme: appThemeData(),
         builder: (context, widget) {
           ScreenUtil.setContext(context);
           return MediaQuery(
@@ -34,7 +29,8 @@ class MyApp extends StatelessWidget {
             child: widget ?? Container(),
           );
         },
-        home: const SplashScreen(),
+        initialRoute: Routes.splashScreen,
+        onGenerateRoute: RouteGenerator.generateRoute,
         debugShowCheckedModeBanner: false,
       ),
     );
