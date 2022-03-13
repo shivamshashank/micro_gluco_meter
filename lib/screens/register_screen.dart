@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:micro_gluco_meter/models/user_model.dart';
+import 'package:micro_gluco_meter/providers/user_provider.dart';
 import 'package:micro_gluco_meter/utils/routes.dart';
 import 'package:micro_gluco_meter/widgets/custom_app_bar.dart';
 import 'package:micro_gluco_meter/widgets/custom_button.dart';
 import 'package:micro_gluco_meter/widgets/gender_card.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -28,6 +31,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Fluttertoast.showToast(msg: "Please select gender.");
       } else {
         FocusScope.of(context).unfocus();
+        context.read<UserProvider>().user = UserModel(
+          name: _nameTEC.text,
+          gender: _gender,
+          age: _ageTEC.text,
+          phoneNumber: _phoneNumberTEC.text,
+        );
         Navigator.pushNamed(
           context,
           Routes.uploadImageScreen,
@@ -39,11 +48,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(appBarText: "Registration"),
+      appBar: CustomAppBar(
+        appBarText: "Registration",
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.description),
+          ),
+        ],
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
           physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
           children: [
             Padding(
               padding: const EdgeInsets.all(16),

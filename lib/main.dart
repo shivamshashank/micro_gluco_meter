@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:micro_gluco_meter/providers/user_provider.dart';
 import 'package:micro_gluco_meter/utils/routes.dart';
 import 'package:micro_gluco_meter/widgets/app_theme_data.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,21 +19,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      builder: () => MaterialApp(
-        title: 'Micro Gluco Meter',
-        theme: appThemeData(),
-        builder: (context, widget) {
-          ScreenUtil.setContext(context);
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: widget ?? Container(),
-          );
-        },
-        initialRoute: Routes.splashScreen,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: UserProvider()),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(360, 690),
+        builder: () => MaterialApp(
+          title: 'Micro Gluco Meter',
+          theme: appThemeData(),
+          builder: (context, widget) {
+            ScreenUtil.setContext(context);
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: widget ?? Container(),
+            );
+          },
+          initialRoute: Routes.splashScreen,
+          onGenerateRoute: RouteGenerator.generateRoute,
+          debugShowCheckedModeBanner: false,
+        ),
       ),
     );
   }

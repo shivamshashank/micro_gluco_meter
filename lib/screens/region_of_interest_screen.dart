@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:micro_gluco_meter/screens/reports_screen.dart';
+import 'package:micro_gluco_meter/utils/routes.dart';
 import 'package:micro_gluco_meter/widgets/custom_app_bar.dart';
 import 'package:micro_gluco_meter/widgets/custom_button.dart';
 
@@ -64,7 +66,14 @@ class _RegionOfInterestScreenState extends State<RegionOfInterestScreen> {
           "CONFIRM",
           style: TextStyle(fontSize: 16),
         ),
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.reportsScreen,
+          (route) => false,
+          arguments: ReportsArguments(
+            imageFile: widget.regionOfInterestArguments.imageFile,
+          ),
+        ),
       ),
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:micro_gluco_meter/main.dart';
+import 'package:micro_gluco_meter/screens/graphs_screen.dart';
 import 'package:micro_gluco_meter/screens/region_of_interest_screen.dart';
 import 'package:micro_gluco_meter/screens/register_screen.dart';
+import 'package:micro_gluco_meter/screens/reports_screen.dart';
 import 'package:micro_gluco_meter/screens/splash_screen.dart';
 import 'package:micro_gluco_meter/screens/upload_image_screen.dart';
 
@@ -10,6 +12,8 @@ class Routes {
   static const String registerScreen = '/registerScreen';
   static const String uploadImageScreen = '/uploadImageScreen';
   static const String regionOfInterestScreen = '/regionOfInterestScreen';
+  static const String reportsScreen = '/reportsScreen';
+  static const String graphsScreen = '/graphsScreen';
 }
 
 class RouteGenerator {
@@ -28,6 +32,15 @@ class RouteGenerator {
             regionOfInterestArguments: args,
           ),
         );
+      case Routes.reportsScreen:
+        final args = settings.arguments as ReportsArguments;
+        return CupertinoPageRoute(
+          builder: (_) => ReportsScreen(
+            reportsArguments: args,
+          ),
+        );
+      case Routes.graphsScreen:
+        return CupertinoPageRoute(builder: (_) => const GraphsScreen());
 
       default:
         return CupertinoPageRoute(builder: (_) => const MyApp());
