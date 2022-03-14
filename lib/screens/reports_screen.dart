@@ -2,13 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:micro_gluco_meter/models/record_model.dart';
 import 'package:micro_gluco_meter/models/user_model.dart';
 import 'package:micro_gluco_meter/providers/user_provider.dart';
 import 'package:micro_gluco_meter/utils/routes.dart';
 import 'package:micro_gluco_meter/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 
-class ReportsScreen extends StatelessWidget {
+class ReportsScreen extends StatefulWidget {
   final ReportsArguments reportsArguments;
 
   const ReportsScreen({
@@ -17,8 +19,27 @@ class ReportsScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ReportsScreen> createState() => _ReportsScreenState();
+}
+
+class _ReportsScreenState extends State<ReportsScreen> {
+  final String _concentration = "343.12 mm of Hg";
+
+  @override
   Widget build(BuildContext context) {
-    UserModel? _user = context.read<UserProvider>().user;
+    UserModel _user = context.read<UserProvider>().user!;
+
+    Box _box = Hive.box("box");
+    _box.put(
+      DateTime.now().millisecond,
+      RecordModel(
+        name: _user.name,
+        gender: _user.gender,
+        age: _user.age,
+        phoneNumber: _user.phoneNumber,
+        concentration: _concentration,
+      ),
+    );
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -41,7 +62,7 @@ class ReportsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
-              initialValue: _user!.name,
+              initialValue: _user.name,
               readOnly: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
@@ -103,14 +124,13 @@ class ReportsScreen extends StatelessWidget {
                   vertical: 16,
                 ),
                 labelText: 'Phone Number',
-                prefixText: "+91",
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
-              initialValue: "343.12 mm of Hg",
+              initialValue: _concentration,
               readOnly: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
@@ -127,7 +147,7 @@ class ReportsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Image.file(
-              reportsArguments.imageFile,
+              widget.reportsArguments.imageFile,
               width: double.infinity,
               height: 0.3.sh,
               fit: BoxFit.cover,

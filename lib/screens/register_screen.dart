@@ -52,7 +52,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         appBarText: "Registration",
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(
+              context,
+              Routes.recordsScreen,
+            ),
             icon: const Icon(Icons.description),
           ),
         ],
@@ -152,7 +155,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     vertical: 16,
                   ),
                   labelText: 'Phone Number',
-                  prefixText: "+91",
                 ),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],

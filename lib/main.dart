@@ -1,15 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:micro_gluco_meter/models/record_model.dart';
 import 'package:micro_gluco_meter/providers/user_provider.dart';
 import 'package:micro_gluco_meter/utils/routes.dart';
 import 'package:micro_gluco_meter/widgets/app_theme_data.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  Directory directory = await getApplicationDocumentsDirectory();
+  Hive
+    ..init(directory.path)
+    ..registerAdapter(RecordModelAdapter());
+
+  await Hive.openBox('box');
 
   runApp(const MyApp());
 }
