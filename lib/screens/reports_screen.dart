@@ -1,16 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:micro_gluco_meter/models/record_model.dart';
 import 'package:micro_gluco_meter/models/user_model.dart';
 import 'package:micro_gluco_meter/providers/user_provider.dart';
 import 'package:micro_gluco_meter/utils/routes.dart';
 import 'package:micro_gluco_meter/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ReportsScreen extends StatefulWidget {
+class ReportsScreen extends StatelessWidget {
   final ReportsArguments reportsArguments;
 
   const ReportsScreen({
@@ -18,27 +19,29 @@ class ReportsScreen extends StatefulWidget {
     required this.reportsArguments,
   }) : super(key: key);
 
-  @override
-  State<ReportsScreen> createState() => _ReportsScreenState();
-}
-
-class _ReportsScreenState extends State<ReportsScreen> {
   final String _concentration = "343.12 mm of Hg";
 
   @override
   Widget build(BuildContext context) {
     UserModel _user = context.read<UserProvider>().user!;
 
-    Box _box = Hive.box("box");
-    _box.put(
-      DateTime.now().millisecond,
-      RecordModel(
-        name: _user.name,
-        gender: _user.gender,
-        age: _user.age,
-        phoneNumber: _user.phoneNumber,
-        concentration: _concentration,
-      ),
+    SharedPreferences.getInstance().then(
+      (preferences) {
+        List<String> _previousRecords =
+            preferences.getStringList("records") ?? [];
+        _previousRecords.add(
+          jsonEncode(
+            RecordModel(
+              name: _user.name,
+              gender: _user.gender,
+              age: _user.age,
+              phoneNumber: _user.phoneNumber,
+              concentration: _concentration,
+            ).toJson(),
+          ),
+        );
+        preferences.setStringList('records', _previousRecords);
+      },
     );
 
     return Scaffold(
@@ -147,7 +150,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Image.file(
-              widget.reportsArguments.imageFile,
+              reportsArguments.imageFile,
               width: double.infinity,
               height: 0.3.sh,
               fit: BoxFit.cover,

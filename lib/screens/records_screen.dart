@@ -1,11 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:micro_gluco_meter/models/record_model.dart';
 import 'package:micro_gluco_meter/widgets/app_theme_data.dart';
 import 'package:micro_gluco_meter/widgets/custom_app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RecordScreen extends StatelessWidget {
+class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RecordScreen> createState() => _RecordScreenState();
+}
+
+class _RecordScreenState extends State<RecordScreen> {
+  final List<RecordModel> _recordsList = [];
 
   Widget _textWidget(String label, String value) {
     return Padding(
@@ -28,13 +37,29 @@ class RecordScreen extends StatelessWidget {
     );
   }
 
+  _setRecordsList() async {
+    SharedPreferences _preferences = await SharedPreferences.getInstance();
+
+    List<String> _recordsString = _preferences.getStringList("records") ?? [];
+
+    for (var element in _recordsString) {
+      _recordsList.add(RecordModel.fromJson(jsonDecode(element)));
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => _setRecordsList(),
+    );
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<RecordModel> _recordsList = [];
-    Hive.box("box").values.cast<RecordModel>().forEach(
-          (element) => _recordsList.add(element),
-        );
-
     return Scaffold(
       appBar: const CustomAppBar(appBarText: "Records"),
       body: _recordsList.isEmpty
