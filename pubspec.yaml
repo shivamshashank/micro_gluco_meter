@@ -19,7 +19,6 @@ dependencies:
   provider: ^6.0.2
   path_provider: ^2.0.9
   shared_preferences: ^2.0.13
-#  starflut: ^1.0.0
 
 dev_dependencies:
   flutter_test:
